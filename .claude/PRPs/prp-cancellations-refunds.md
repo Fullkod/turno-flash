@@ -1,6 +1,6 @@
 # PRP-010: Cancelaciones y devoluciones (TUR0010)
 
-> **Estado**: PENDIENTE
+> **Estado**: HECHO (2026-10-23, en producción)
 > **Fecha**: 2026-10-23
 > **Proyecto**: Turno Flash
 > **Tarea**: TUR0010 «Gestionar cancelaciones y devoluciones»
@@ -72,19 +72,19 @@ de datos lista para los informes de cancelaciones y devoluciones (TUR0011).
   con pasarela (TUR0012).
 
 ### Criterios de Éxito
-- [ ] Cancelar desde el panel no deja confirmar sin elegir motivo; «Otro» exige texto. El motivo, quién y cuándo se ven
+- [x] Cancelar desde el panel no deja confirmar sin elegir motivo; «Otro» exige texto. El motivo, quién y cuándo se ven
       en el detalle del turno cancelado.
-- [ ] Con «Hacemos devoluciones» encendido, un turno cancelado con dinero pagado ofrece «Registrar devolución» con
+- [x] Con «Hacemos devoluciones» encendido, un turno cancelado con dinero pagado ofrece «Registrar devolución» con
       importe hasta lo pagado; apagado, no aparece. El botón «Marcar anticipo devuelto» ya no existe.
-- [ ] El empleado solo puede registrar Pendiente; procesar o rechazar es solo de dueño/admin (también en la BD, no solo
+- [x] El empleado solo puede registrar Pendiente; procesar o rechazar es solo de dueño/admin (también en la BD, no solo
       en la pantalla). Rechazar exige motivo.
-- [ ] No se puede devolver más de lo pagado ni anular un pago que dejaría lo devuelto por encima de lo pagado.
-- [ ] Cuando lo procesado cubre el anticipo, el anticipo queda «Devuelto».
-- [ ] Cada devolución muestra su historial (Pendiente → Procesada/Rechazada, quién y cuándo).
-- [ ] El cliente recibe un WhatsApp al procesarse (importe y cómo) o al rechazarse (motivo), solo si el interruptor de
+- [x] No se puede devolver más de lo pagado ni anular un pago que dejaría lo devuelto por encima de lo pagado.
+- [x] Cuando lo procesado cubre el anticipo, el anticipo queda «Devuelto».
+- [x] Cada devolución muestra su historial (Pendiente → Procesada/Rechazada, quién y cuándo).
+- [x] El cliente recibe un WhatsApp al procesarse (importe y cómo) o al rechazarse (motivo), solo si el interruptor de
       avisos de pago está encendido y el negocio tiene WhatsApp; registrar Pendiente no manda nada.
-- [ ] Con la licencia bloqueada no se lee ni se escribe nada de devoluciones (política 087).
-- [ ] El manual (`/help`) explica motivos de cancelación y devoluciones.
+- [x] Con la licencia bloqueada no se lee ni se escribe nada de devoluciones (política 087).
+- [x] El manual (`/help`) explica motivos de cancelación y devoluciones.
 
 ### Comportamiento Esperado
 
@@ -235,15 +235,25 @@ anticipo «Devuelto», historial correcto; sin interruptor no aparece «Registra
 **Objetivo**: interruptor «Hacemos devoluciones» en Ajustes y texto del interruptor de avisos de pago al día; manual
 `/help` con motivos y devoluciones (fotos incluidas); memoria y entrega (Tasknic a «En revisión»).
 **Validación**:
-- [ ] `npx tsc --noEmit` pasa
-- [ ] `npx eslint .` sin errores nuevos
-- [ ] `npm run build:next` exitoso
-- [ ] Playwright confirma la UI (dueño y empleado)
-- [ ] Criterios de éxito cumplidos
+- [x] `npx tsc --noEmit` pasa
+- [x] `npx eslint .` sin errores nuevos
+- [x] `npm run build:next` exitoso
+- [x] Playwright confirma la UI (dueño y empleado)
+- [x] Criterios de éxito cumplidos
 
 ---
 
 ## 🧠 Aprendizajes (Self-Annealing)
+
+### 2026-10-23: una regla nueva en la BD que la web publicada no cumple
+- **Riesgo**: la 097 exige `cancellation_category` al cancelar desde el panel; con la web vieja, cancelar fallaba.
+- **Fix**: aplicar migración, desplegar funciones y hacer push en el mismo comando (ventana = build de Vercel, 2-3 min),
+  avisando antes a Claudia. Los tipos nuevos se escribieron a mano para compilar antes de aplicar la migración y se
+  regeneraron después (coincidieron).
+- **Aplicar en**: cualquier trigger o CHECK nuevo que la UI actual no satisface.
+
+### 2026-10-23: la ficha tarda un instante en mostrar el anticipo «Devuelto»
+- No es un fallo: el bloque de devoluciones se refresca primero y la ficha justo después (`onAppointmentChange`).
 
 > Esta sección crece con cada error encontrado durante la implementación.
 
@@ -279,4 +289,18 @@ anticipo «Devuelto», historial correcto; sin interruptor no aparece «Registra
 
 ---
 
-*PRP pendiente de aprobación. No se ha modificado código.*
+## Cómo quedó
+
+- **097** (en producción): `appointments.cancellation_category` + trigger que la exige a quien cancela con sesión;
+  `business_settings.refunds_enabled`; `appointment_refunds` y `appointment_refund_events` (solo lectura para miembros,
+  RESTRICTIVE de licencia); RPC `register_appointment_refund` y `set_appointment_refund_status`; `void_appointment_payment`
+  no deja lo devuelto por encima de lo pagado; `refresh_deposit_refunded`; vista con `cancellation_category`,
+  `amount_refunded`, `amount_refund_pending`; trigger `trg_wa_refund_notice`.
+- **`wa-send` v39** (`refund_processed`, `refund_rejected`, `notice_sent_at`); **`wa-inbound` v51** (cancelar por WhatsApp =
+  `customer`).
+- **App**: `CancelAppointmentSheet` + `CancellationNote`, `AppointmentRefunds`, `RefundSheet`, servicio/hook/schema de
+  devoluciones; «Marcar anticipo devuelto» eliminado; interruptor «Hacemos devoluciones». **Manual** con foto `refunds.webp`.
+- **Probado**: 30 casos por rol en BEGIN/ROLLBACK; en el navegador (app local contra producción, negocio desechable con
+  WhatsApp falso, ya borrado): cancelar con «Otro», devolución parcial ya hecha, anticipo «Devuelto», rechazo de una
+  pendiente del empleado con historial, textos de WhatsApp y el interruptor en Ajustes. **Sin probar** con un WhatsApp real.
+

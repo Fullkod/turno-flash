@@ -109,3 +109,7 @@ here). "Preparing a release" means: bump `versionCode`/`versionName` in `android
 commit, and make sure it is pushed; he launches the build and uploads it to Play Console himself.
 State on 2026-10-12: `versionCode 3` / `1.1.0` is on `origin/main` (commit `e0bbe67`); Play still has
 code 2 (1.0.1, June 2026). Production access was requested on 2026-10-12 at 16:21.
+
+- **Probar la UI contra producción (2026-10-23):** `npm run dev` en segundo plano + MCP de Playwright a 390x844 con un
+  negocio desechable creado con la clave de servicio (y `openwa_session_id` falso para que no salga ningún WhatsApp).
+  Para una foto del manual: ocultar el botón de Next con `nextjs-portal{display:none}` y recortar con `sharp` a webp.

@@ -76,3 +76,18 @@ PRP `.claude/PRPs/prp-payment-reminders.md`; migración **096**, `wa-send` v38, 
   en un turno pendiente (ya sale `approved`). Anular no avisa.
 - «Una vez por plazo» se lee de `wa_outbound_messages`; el acuse, de `appointment_payments.ack_sent_at`.
 - Falta: probar con un WhatsApp real.
+
+## Cancelaciones y devoluciones (TUR0010, 2026-10-23)
+
+PRP `.claude/PRPs/prp-cancellations-refunds.md`; migración **097**, `wa-send` v39, `wa-inbound` v51.
+- **Cancelar desde el panel exige motivo** (`cancellation_category`: customer | business | deposit_unpaid | other + texto);
+  lo impone un trigger para cualquier sesión `authenticated` (WhatsApp y service role no). Se ve en la ficha.
+- **Devoluciones** (`appointment_refunds` + historial `appointment_refund_events`), solo en turnos cancelados o «No
+  vino», hasta lo pagado (pagos no anulados − devoluciones no rechazadas). Empleado → pendiente; dueño/admin → «Ya la
+  devolví» directo, o procesa/rechaza una pendiente (rechazo con motivo). No se editan ni se borran.
+- Interruptor `business_settings.refunds_enabled` (encendido): apagado no deja crear nuevas, sí resolver pendientes.
+- Lo procesado ≥ anticipo (con pago de anticipo activo) → anticipo `refunded`, también si estaba `cancelled` porque lo
+  cobró un empleado. «Marcar anticipo devuelto» ya no existe en la UI (la RPC `set_appointment_deposit('refund')` sigue).
+- No se puede anular un pago ya devuelto o con devolución pendiente (`payment_refunded`).
+- WhatsApp al procesar/rechazar con el interruptor de avisos de pago (096). Lo pagado no baja: los ingresos netos son
+  cosa de TUR0011.
