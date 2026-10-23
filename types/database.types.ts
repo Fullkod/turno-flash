@@ -149,6 +149,147 @@ export type Database = {
           },
         ]
       }
+      appointment_refund_events: {
+        Row: {
+          changed_at: string
+          changed_by: string | null
+          id: string
+          note: string | null
+          organization_id: string
+          refund_id: string
+          status: Database["public"]["Enums"]["appointment_refund_status"]
+        }
+        Insert: {
+          changed_at?: string
+          changed_by?: string | null
+          id?: string
+          note?: string | null
+          organization_id: string
+          refund_id: string
+          status: Database["public"]["Enums"]["appointment_refund_status"]
+        }
+        Update: {
+          changed_at?: string
+          changed_by?: string | null
+          id?: string
+          note?: string | null
+          organization_id?: string
+          refund_id?: string
+          status?: Database["public"]["Enums"]["appointment_refund_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointment_refund_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointment_refund_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations_with_license_status"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointment_refund_events_refund_id_fkey"
+            columns: ["refund_id"]
+            isOneToOne: false
+            referencedRelation: "appointment_refunds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      appointment_refunds: {
+        Row: {
+          amount: number
+          appointment_id: string
+          created_at: string
+          created_by: string | null
+          decided_at: string | null
+          decided_by: string | null
+          id: string
+          method:
+            | Database["public"]["Enums"]["appointment_payment_method"]
+            | null
+          method_other: string | null
+          notice_sent_at: string | null
+          organization_id: string
+          reason: string
+          refunded_at: string | null
+          rejection_reason: string | null
+          status: Database["public"]["Enums"]["appointment_refund_status"]
+        }
+        Insert: {
+          amount: number
+          appointment_id: string
+          created_at?: string
+          created_by?: string | null
+          decided_at?: string | null
+          decided_by?: string | null
+          id?: string
+          method?:
+            | Database["public"]["Enums"]["appointment_payment_method"]
+            | null
+          method_other?: string | null
+          notice_sent_at?: string | null
+          organization_id: string
+          reason: string
+          refunded_at?: string | null
+          rejection_reason?: string | null
+          status?: Database["public"]["Enums"]["appointment_refund_status"]
+        }
+        Update: {
+          amount?: number
+          appointment_id?: string
+          created_at?: string
+          created_by?: string | null
+          decided_at?: string | null
+          decided_by?: string | null
+          id?: string
+          method?:
+            | Database["public"]["Enums"]["appointment_payment_method"]
+            | null
+          method_other?: string | null
+          notice_sent_at?: string | null
+          organization_id?: string
+          reason?: string
+          refunded_at?: string | null
+          rejection_reason?: string | null
+          status?: Database["public"]["Enums"]["appointment_refund_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "appointment_refunds_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointment_refunds_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "appointments_with_details"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointment_refunds_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "appointment_refunds_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations_with_license_status"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       appointment_requests: {
         Row: {
           alternative_dates: Json | null
@@ -257,90 +398,6 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
-      }
-      appointment_refund_events: {
-        Row: {
-          changed_at: string
-          changed_by: string | null
-          id: string
-          note: string | null
-          organization_id: string
-          refund_id: string
-          status: Database["public"]["Enums"]["appointment_refund_status"]
-        }
-        Insert: {
-          changed_at?: string
-          changed_by?: string | null
-          id?: string
-          note?: string | null
-          organization_id?: string
-          refund_id?: string
-          status?: Database["public"]["Enums"]["appointment_refund_status"]
-        }
-        Update: {
-          changed_at?: string
-          changed_by?: string | null
-          id?: string
-          note?: string | null
-          organization_id?: string
-          refund_id?: string
-          status?: Database["public"]["Enums"]["appointment_refund_status"]
-        }
-        Relationships: []
-      }
-      appointment_refunds: {
-        Row: {
-          amount: number
-          appointment_id: string
-          created_at: string
-          created_by: string | null
-          decided_at: string | null
-          decided_by: string | null
-          id: string
-          method: Database["public"]["Enums"]["appointment_payment_method"] | null
-          method_other: string | null
-          notice_sent_at: string | null
-          organization_id: string
-          reason: string
-          refunded_at: string | null
-          rejection_reason: string | null
-          status: Database["public"]["Enums"]["appointment_refund_status"]
-        }
-        Insert: {
-          amount?: number
-          appointment_id?: string
-          created_at?: string
-          created_by?: string | null
-          decided_at?: string | null
-          decided_by?: string | null
-          id?: string
-          method?: Database["public"]["Enums"]["appointment_payment_method"] | null
-          method_other?: string | null
-          notice_sent_at?: string | null
-          organization_id?: string
-          reason?: string
-          refunded_at?: string | null
-          rejection_reason?: string | null
-          status?: Database["public"]["Enums"]["appointment_refund_status"]
-        }
-        Update: {
-          amount?: number
-          appointment_id?: string
-          created_at?: string
-          created_by?: string | null
-          decided_at?: string | null
-          decided_by?: string | null
-          id?: string
-          method?: Database["public"]["Enums"]["appointment_payment_method"] | null
-          method_other?: string | null
-          notice_sent_at?: string | null
-          organization_id?: string
-          reason?: string
-          refunded_at?: string | null
-          rejection_reason?: string | null
-          status?: Database["public"]["Enums"]["appointment_refund_status"]
-        }
-        Relationships: []
       }
       appointments: {
         Row: {
@@ -556,6 +613,7 @@ export type Database = {
           min_advance_booking_hours: number | null
           openwa_session_id: string | null
           organization_id: string
+          refunds_enabled: boolean
           reminder_settings: Json | null
           require_approval: boolean | null
           seat_booking_enabled: boolean
@@ -588,6 +646,7 @@ export type Database = {
           min_advance_booking_hours?: number | null
           openwa_session_id?: string | null
           organization_id: string
+          refunds_enabled?: boolean
           reminder_settings?: Json | null
           require_approval?: boolean | null
           seat_booking_enabled?: boolean
@@ -620,6 +679,7 @@ export type Database = {
           min_advance_booking_hours?: number | null
           openwa_session_id?: string | null
           organization_id?: string
+          refunds_enabled?: boolean
           reminder_settings?: Json | null
           require_approval?: boolean | null
           seat_booking_enabled?: boolean
@@ -2298,8 +2358,11 @@ export type Database = {
           actual_start_time: string | null
           amount_paid: number | null
           amount_pending: number | null
+          amount_refund_pending: number | null
+          amount_refunded: number | null
           appointment_date: string | null
           appointment_number: string | null
+          cancellation_category: string | null
           cancellation_reason: string | null
           cancelled_at: string | null
           cancelled_by: string | null
@@ -2458,6 +2521,10 @@ export type Database = {
       }
       appointment_amount_paid: {
         Args: { p_appointment_id: string }
+        Returns: number
+      }
+      appointment_amount_refunded: {
+        Args: { p_appointment_id: string; p_with_pending?: boolean }
         Returns: number
       }
       auth_org_usable: { Args: never; Returns: boolean }
@@ -2706,6 +2773,10 @@ export type Database = {
         Args: { p_appointment_id: string }
         Returns: undefined
       }
+      refresh_deposit_refunded: {
+        Args: { p_appointment_id: string }
+        Returns: undefined
+      }
       register_appointment_payment: {
         Args: {
           p_amount: number
@@ -2785,6 +2856,10 @@ export type Database = {
         Args: { p_service_id: string }
         Returns: number
       }
+      set_appointment_deposit: {
+        Args: { p_action: string; p_appointment_id: string }
+        Returns: Database["public"]["Enums"]["appointment_deposit_status"]
+      }
       set_appointment_refund_status: {
         Args: {
           p_method: Database["public"]["Enums"]["appointment_payment_method"]
@@ -2795,10 +2870,6 @@ export type Database = {
           p_status: string
         }
         Returns: undefined
-      }
-      set_appointment_deposit: {
-        Args: { p_action: string; p_appointment_id: string }
-        Returns: Database["public"]["Enums"]["appointment_deposit_status"]
       }
       set_appointment_terms: {
         Args: {
@@ -2865,8 +2936,8 @@ export type Database = {
         | "verified"
         | "cancelled"
         | "refunded"
-      appointment_refund_status: "pending" | "processed" | "rejected"
       appointment_payment_method: "cash" | "transfer" | "card" | "other"
+      appointment_refund_status: "pending" | "processed" | "rejected"
       appointment_source: "web" | "whatsapp" | "phone" | "walk_in" | "admin"
       appointment_status:
         | "pending"
@@ -2933,6 +3004,8 @@ export type Database = {
         | "deposit_overdue"
         | "notify_business_deposit_overdue"
         | "payment_received"
+        | "refund_processed"
+        | "refund_rejected"
       wa_outbound_status: "pending" | "sent" | "delivered" | "read" | "failed"
       waitlist_status:
         | "active"
@@ -3078,8 +3151,8 @@ export const Constants = {
         "cancelled",
         "refunded",
       ],
-      appointment_refund_status: ["pending", "processed", "rejected"],
       appointment_payment_method: ["cash", "transfer", "card", "other"],
+      appointment_refund_status: ["pending", "processed", "rejected"],
       appointment_source: ["web", "whatsapp", "phone", "walk_in", "admin"],
       appointment_status: [
         "pending",
@@ -3150,6 +3223,8 @@ export const Constants = {
         "deposit_overdue",
         "notify_business_deposit_overdue",
         "payment_received",
+        "refund_processed",
+        "refund_rejected",
       ],
       wa_outbound_status: ["pending", "sent", "delivered", "read", "failed"],
       waitlist_status: ["active", "notified", "booked", "expired", "cancelled"],
