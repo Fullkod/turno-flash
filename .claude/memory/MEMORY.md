@@ -42,3 +42,4 @@
 - [Google Play](reference/google-play.md) — cuenta «Ismel»; en Play solo hay 1.0.0 interna y 1.0.1 alpha de junio 2026, **nada en producción**; clasificación IARC para todos los públicos (cuestionario 12 jun 2026, ID guardado); el «Live Rating Notice» del 14 oct fue automático, sin acción; dónde verlo en la consola
 - [Secretos en assets del template](reference/secretos-en-assets-del-template.md) — el PNG de video-visuals traia una API key de OpenRouter en su XMP; como detectarla y como reescribir commits sin pushear
 - [Capturas de demo](reference/capturas-demo-2026-10-22.md) — datos ficticios del negocio «Organización test» para la web de Fullkod; qué sigue sucio
+- [Correo de Fullkod](reference/correo-fullkod-resend.md) — @fullkod.com va por Resend (contact@, support@), sin reenvío; cada proyecto decide cómo avisar de sus formularios
