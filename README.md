@@ -138,4 +138,4 @@ el código y `git log`.
 
 ## Licencia
 
-MIT — ver [LICENSE](LICENSE).
+Software propietario. Todos los derechos reservados por Fullkod — ver [LICENSE](LICENSE).
