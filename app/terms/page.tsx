@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 const LAST_UPDATED = "12 de octubre de 2026";
-const CONTACT_EMAIL = "robert.cabrer92@gmail.com";
+const CONTACT_EMAIL = "contact@fullkod.com";
 
 export default function TermsPage() {
   return (

@@ -43,7 +43,7 @@ import { Capacitor } from "@capacitor/core";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-const CONTACT_EMAIL = "robert.cabrer92@gmail.com";
+const CONTACT_EMAIL = "contact@fullkod.com";
 
 interface Feature {
   Icon: LucideIcon;

@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     "Cómo eliminar tu cuenta de Turno Flash y qué datos se eliminan.",
 };
 
-const CONTACT_EMAIL = "robert.cabrer92@gmail.com";
+const CONTACT_EMAIL = "contact@fullkod.com";
 
 export default function AccountDeletionPage() {
   return (
