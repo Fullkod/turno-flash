@@ -720,9 +720,24 @@ export default function HomePageClient() {
             <Link href="/account-deletion">Eliminar cuenta</Link>
           </FooterColumn>
         </div>
-        <div className="mt-12 border-t border-border pt-5 text-meta text-foreground-subtle">
-          © {new Date().getFullYear()} Turno Flash. Todos los derechos
-          reservados.
+        <div className="mt-12 flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-border pt-5 text-meta text-foreground-subtle">
+          <span>
+            © {new Date().getFullYear()} Turno Flash. Todos los derechos
+            reservados.
+          </span>
+          <a
+            href="https://fullkod.com/?ref=turno-flash"
+            target="_blank"
+            rel="noopener"
+            className="inline-flex items-center gap-1.5 hover:text-foreground"
+          >
+            Desarrollado por
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/fullkod-symbol.svg" alt="" className="h-3.5 w-3.5 dark:hidden" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/brand/fullkod-symbol-reversed.svg" alt="" className="hidden h-3.5 w-3.5 dark:block" />
+            <span className="font-semibold text-foreground-muted">Fullkod</span>
+          </a>
         </div>
       </footer>
     </div>
