@@ -1,5 +1,6 @@
 "use client";
 
+import { FullkodCredit } from "@/components/FullkodCredit";
 import { LicenseGate } from "@/components/license-gate";
 import { MobileTabBar } from "@/components/MobileTabBar";
 import { MobileTopbar } from "@/components/MobileTopbar";
@@ -93,6 +94,9 @@ function DashboardContent({ children }: { children: React.ReactNode }) {
         <MobileTopbar />
         <OfflineBanner />
         <main className="flex-1">{blockedByModule ? null : children}</main>
+        <div className="flex justify-end px-5 pb-5 pt-8 lg:px-8 print:hidden">
+          <FullkodCredit />
+        </div>
         <MobileTabBar
           moreOpen={moreOpen}
           onMore={() => setMoreOpenAt(pathname)}

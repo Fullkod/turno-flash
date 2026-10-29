@@ -38,6 +38,7 @@ import {
   Users,
 } from "lucide-react";
 import Link from "next/link";
+import { FullkodCredit } from "@/components/FullkodCredit";
 import { Capacitor } from "@capacitor/core";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -725,19 +726,7 @@ export default function HomePageClient() {
             © {new Date().getFullYear()} Turno Flash. Todos los derechos
             reservados.
           </span>
-          <a
-            href="https://fullkod.com/?ref=turno-flash"
-            target="_blank"
-            rel="noopener"
-            className="inline-flex items-center gap-1.5 hover:text-foreground"
-          >
-            Desarrollado por
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/fullkod-symbol.svg" alt="" className="h-3.5 w-3.5 dark:hidden" />
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src="/brand/fullkod-symbol-reversed.svg" alt="" className="hidden h-3.5 w-3.5 dark:block" />
-            <span className="font-semibold text-foreground-muted">Fullkod</span>
-          </a>
+          <FullkodCredit />
         </div>
       </footer>
     </div>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { WithFullkodCredit } from "@/components/FullkodCredit";
 
 export const metadata: Metadata = {
   title: "Iniciar Sesión",
@@ -15,5 +16,5 @@ export default function LoginLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <>{children}</>;
+  return <WithFullkodCredit pinned>{children}</WithFullkodCredit>;
 }
