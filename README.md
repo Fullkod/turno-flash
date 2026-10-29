@@ -139,3 +139,8 @@ el código y `git log`.
 ## Licencia
 
 Software propietario. Todos los derechos reservados por Fullkod — ver [LICENSE](LICENSE).
+
+<!-- fullkod-signature -->
+---
+
+<a href="https://fullkod.com/?ref=turno-flash"><img src="https://fullkod.com/brand/fullkod-symbol.svg" width="20" height="20" align="center" alt="Fullkod"></a> Built by **[Fullkod](https://fullkod.com/?ref=turno-flash)**
