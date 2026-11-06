@@ -33,6 +33,7 @@ Claudia elige la tarea del board («procede con la tarea N»): PRP → aprobaci�
 comentario y despliegues en Tasknic **solo cuando ella lo pide** → tarea a `in_review`.
 - TUR0003 anticipos — en revisión (prueba real con WhatsApp hecha 2026-10-21, OT-0065).
 - TUR0007 precio y condiciones — en revisión, asignada a Claudia.
+- **TUR0011 Finanzas — subido (`0021703`), comentario a nombre de Claudia y en «En revisión» el 2026-11-05.**
 - **TUR0008 pagos de cada turno — HECHO EN LOCAL, PAUSADO el 2026-10-22 antes de entregar** (ver abajo).
 - Siguientes del board: TUR0009 recordatorios de pago, TUR0010 devoluciones, TUR0011 panel e informes
   (TUR0012 pasarelas de pago).

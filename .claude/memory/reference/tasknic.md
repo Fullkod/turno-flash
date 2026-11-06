@@ -24,3 +24,7 @@ metadata:
   (`web`, `migrations`, `edge-functions/<nombre>`; sin target = todo) y `migrations_applied`.
   **Registrar cada despliegue a producción al terminarlo.** Primer registro: `2966d61`, sin verificar. 2026-10-16: registrados 087+088, `wa-send`/`wa-trip-send`/`wa-inbound` (verificados) y la web en `8a99af2` (sin verificar en Vercel). 2026-10-20: la web en `da8fe5c` (arreglo del Logger, sin verificar). 2026-10-23: 095 (verificada) y la web en `19a2f6a` (TUR0008, sin verificar); 096, `wa-send` v38 y `send-reminders` v15 (verificados), `wa-inbound` v50 y la web en `17e8ba8` (TUR0009, sin verificar).
   Además hay una nota larga «Despliegue» en Documentos del Espacio.
+
+- **2026-11-05:** para comprobar tildes de lo que devuelve la API, leer con `sys.stdin.buffer.read().decode("utf-8")`:
+  el `json.load(sys.stdin)` de Python en Windows decodifica en cp1252 y muestra «Ã©» aunque en Tasknic esté bien.
+  Para mandar texto con tildes, JSON escrito con Write y `--data-binary @archivo` funciona.
