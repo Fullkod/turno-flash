@@ -899,6 +899,29 @@ Escribe <b>OK EN-0042</b> para confirmar o <b>CANCELAR EN-0042</b> si no puedes.
     <p>Solo suman los turnos <span class="chip st-completed">Terminado</span>, con el precio del servicio. Un turno que quedó en Confirmado aunque el cliente vino no aparece en los ingresos: acostúmbrate a terminarlos.</p>
   </div>
 
+  <h2 id="td-finanzas">Finanzas</h2>
+  <p><span class="path">Finanzas</span> es la caja del negocio: cuánto esperas cobrar, cuánto entró, qué falta y qué ya debió pagarse. Solo la ves tú (tu equipo no). Si también vendes viajes, arriba eliges <span class="ui">Turnos</span> o <span class="ui">Pasajes</span>: cada uno tiene sus números.</p>
+  <figure class="shot"><img src="/images/help/finances.webp" alt="Finanzas de los turnos en el teléfono: Previsto, Cobrado, Pendiente y Vencido del mes pasado." width="520" height="933" loading="lazy"><figcaption>Finanzas: las cuatro cifras del periodo. Debajo siguen el resumen y cada turno.</figcaption></figure>
+  <ol class="steps">
+    <li>Elige el periodo: <span class="ui">Hoy</span>, <span class="ui">Esta semana</span>, <span class="ui">Este mes</span>, <span class="ui">Mes pasado</span>, <span class="ui">Próximos 30 días</span> o <span class="ui">Elegir fechas</span> (para un solo día, pon la misma fecha en <em>Desde</em> y <em>Hasta</em>).</li>
+    <li>Mira las cuatro cifras:
+      <ul>
+        <li><strong>Previsto:</strong> lo que valen los turnos del periodo, sin los cancelados ni los <em>No vino</em>.</li>
+        <li><strong>Cobrado:</strong> lo que entró en caja, ya restado lo que devolviste.</li>
+        <li><strong>Pendiente:</strong> lo que falta cobrar de esos turnos.</li>
+        <li><strong>Vencido:</strong> lo que ya debió pagarse: turnos que ya pasaron sin cobrar del todo y anticipos con el plazo vencido. Tócalo para ver a quién reclamarle.</li>
+      </ul>
+    </li>
+    <li>Debajo, el <strong>resumen por periodo</strong> muestra lo previsto y lo cobrado por <span class="ui">Día</span>, <span class="ui">Semana</span> o <span class="ui">Mes</span>, con gráfico y tabla.</li>
+    <li>Al final está cada turno con lo pagado, lo que falta y su estado. Tócalo para abrir su ficha y cobrar o devolver desde ahí.</li>
+  </ol>
+  <p>Con los filtros buscas por cliente, servicio, profesional, forma de pago y estado del pago (<em>Sin pagar</em>, <em>Pago parcial</em>, <em>Pagado</em>, <em>Vencido</em>, <em>Con devolución</em>). En el teléfono están en el botón <span class="ui">Filtros</span>. Las cifras, el resumen y la lista siempre muestran lo mismo filtrado.</p>
+  <p>Con <span class="ui">CSV</span> o <span class="ui">Excel</span> descargas lo que estás viendo, para tus cuentas o para tu contador. El Excel trae una hoja <em>Resumen</em> y otra <em>Detalle</em>. Las descargas están en la versión web: en la app del teléfono esos botones no aparecen.</p>
+  <div class="callout note">
+    <span class="tag">Por qué a veces no cuadra a simple vista</span>
+    <p>Lo cobrado cuenta el día en que <strong>entró el dinero</strong>; lo previsto y lo pendiente, el día del turno. Un anticipo que te pagan hoy de un turno del mes que viene suma a lo cobrado de este mes y a lo previsto del mes que viene.</p>
+  </div>
+
   <h2 id="td-equipo">Tu equipo</h2>
   <p>En <span class="path">Invitar</span> escribe el correo de la persona y pulsa <span class="ui">Enviar invitación</span>. Recibe un correo con un enlace para crear su contraseña y queda en tu negocio como <strong>personal</strong>.</p>
   <figure class="shot"><img src="/images/help/team.webp" alt="Invitar a alguien por correo y ver quién tiene acceso." width="520" height="933" loading="lazy"><figcaption>Invitar a alguien por correo y ver quién tiene acceso.</figcaption></figure>
@@ -1163,6 +1186,7 @@ Escribe <b>OK EN-0042</b> para confirmar o <b>CANCELAR EN-0042</b> si no puedes.
       <thead><tr><th>Campo</th><th>Para qué sirve</th></tr></thead>
       <tbody>
         <tr><td>Título</td><td class="wrap">Nombre corto de la salida, por ejemplo <em>Santa Clara – La Habana</em>.</td></tr>
+        <tr><td>Destino</td><td class="wrap">Opcional: hacia dónde va, por ejemplo <em>La Habana</em>. Sirve para ver el dinero por destino en <span class="path">Finanzas</span>; tus clientes no lo ven.</td></tr>
         <tr><td>Descripción</td><td class="wrap">Lo que ve el cliente: ruta, qué incluye, qué llevar.</td></tr>
         <tr><td>Punto de encuentro</td><td class="wrap">Dónde y cómo encontrar el autobús.</td></tr>
         <tr><td>Fecha, Sale, Regresa</td><td class="wrap">Día y hora de salida. El regreso es opcional y siempre del mismo día.</td></tr>
@@ -1221,20 +1245,39 @@ Escribe <b>OK EN-0042</b> para confirmar o <b>CANCELAR EN-0042</b> si no puedes.
   <p>Pulsa <span class="ui">Aprobar</span> en la reserva. Pasa a <span class="chip st-completed">Confirmada</span> y, con WhatsApp conectado, el pasajero recibe la confirmación. El anticipo sigue como estaba.</p>
 
   <h3>Registrar un cobro</h3>
+  <p>Cada pago de una reserva queda guardado por separado, con su día y su forma de pago. Así sabes qué entró cada día y <span class="path">Finanzas</span> cuadra con tu caja.</p>
   <ol class="steps">
-    <li>Pulsa <span class="ui">Registrar cobro</span> (si ya cobraste algo, el botón muestra <em>Cobrado …</em>).</li>
-    <li>En <strong>Cobrado</strong> escribe el <strong>total recibido hasta ahora</strong> por esa reserva, no solo el último pago.</li>
-    <li>Si hay un extra (llevarlo al aeropuerto, equipaje, otro destino), escribe qué es y cuánto cuesta: se suma a lo que falta cobrar.</li>
-    <li>Opcional: indica cómo pagó (transferencia, efectivo al chofer…).</li>
-    <li>Pulsa <span class="ui">Guardar cobro</span>.</li>
+    <li>Pulsa <span class="ui">Registrar cobro</span> (si ya cobraste algo, el botón muestra <em>Cobrado …</em>). Se abre <em>Cobros</em>, con lo pagado, lo que falta y la lista de pagos.</li>
+    <li>Pulsa <span class="ui">Registrar pago</span>. El importe ya trae el anticipo o lo que falta; los botones <span class="ui">El anticipo</span> y <span class="ui">Todo lo que falta</span> lo cambian de un toque, o escribe cualquier monto. Escribe <strong>solo lo que te pagan ahora</strong>: se suma a lo anterior.</li>
+    <li>Revisa la fecha y elige el método: <span class="ui">Efectivo</span>, <span class="ui">Transferencia (Transfermóvil / EnZona)</span>, <span class="ui">Tarjeta</span> u <span class="ui">Otro</span> (escribe cuál). Si quieres, anota la referencia, una observación y adjunta la foto o el PDF del comprobante.</li>
+    <li>Pulsa <span class="ui">Registrar</span>.</li>
   </ol>
+  <figure class="shot"><img src="/images/help/trip-payments.webp" alt="Los cobros de una reserva: lo pagado, lo que falta y la lista de pagos, con el botón «Registrar pago» y el extra." width="520" height="933" loading="lazy"><figcaption>Los cobros de una reserva, pago por pago.</figcaption></figure>
   <p>Cuando lo cobrado alcanza el anticipo, la reserva pasa sola a <span class="chip st-completed">Anticipo cobrado</span> y el pasajero recibe un WhatsApp con lo que le queda por pagar el día del viaje.</p>
+
+  <div class="callout note">
+    <span class="tag">Bueno saber</span>
+    <ul>
+      <li>Tu equipo también registra pagos. <strong>Solo tú los anulas</strong>: pulsa <span class="ui">Anular</span> en el pago y escribe el motivo. No se borra: queda tachado, deja de sumar y se ve quién lo anuló y cuándo. Si cubría el anticipo, el anticipo vuelve a quedar pendiente.</li>
+      <li>Si hay un extra (llevarlo al aeropuerto, equipaje, otro destino), escríbelo en <em>Cobros</em>, en <strong>Extra</strong> y <strong>Costo del extra</strong>, y pulsa <span class="ui">Guardar extra</span>: se suma a lo que falta cobrar.</li>
+      <li>Los cobros que registraste antes de este cambio aparecen como un solo pago cada uno, con la forma de pago <em>Otro</em> si no se sabía.</li>
+    </ul>
+  </div>
+
+  <h3>Devolver dinero de una reserva cancelada</h3>
+  <p>Si una reserva cancelada (o de una salida cancelada) tenía pagos, el botón de la reserva dice <em>Pagó … · Devoluciones</em>. Ábrelo y verás el bloque <em>Devoluciones</em>.</p>
+  <ol class="steps">
+    <li>Pulsa <span class="ui">Registrar devolución</span>. El importe ya trae todo lo pagado; cámbialo si devuelves una parte. El motivo trae el de la cancelación.</li>
+    <li>Si ya devolviste el dinero, elige <span class="ui">Ya la devolví</span>, el método y la fecha. Si todavía no, <span class="ui">Queda pendiente</span>.</li>
+    <li>Pulsa <span class="ui">Registrar</span>. Una devolución pendiente se resuelve después con <span class="ui">Marcar devuelta</span> o <span class="ui">Rechazar</span> (con el motivo).</li>
+  </ol>
+  <p>Funciona igual que en los turnos: nunca se devuelve más de lo pagado, tu equipo puede registrarlas pero quedan pendientes hasta que tú decidas, cada una guarda su historial, y con WhatsApp conectado el pasajero recibe un mensaje cuando la devuelves o la rechazas. Si no haces devoluciones, apaga <span class="path">Ajustes <i>›</i> Hacemos devoluciones</span>.</p>
 
   <h3>Otras acciones del menú ⋮ de cada reserva</h3>
   <ul>
     <li><span class="ui">Editar nombres de pasajeros</span>: un nombre por asiento.</li>
     <li><span class="ui">Aprobar reserva</span>, mientras esté por aprobar.</li>
-    <li><span class="ui">Cancelar reserva</span>: los asientos vuelven a quedar libres y, con WhatsApp conectado, el pasajero recibe un aviso. Si ya había pagado algo, el mensaje le pide contactarte para la devolución.</li>
+    <li><span class="ui">Cancelar reserva</span>: los asientos vuelven a quedar libres y, con WhatsApp conectado, el pasajero recibe un aviso. Si ya había pagado algo, el mensaje le pide contactarte para la devolución, que después registras en sus cobros (ver arriba).</li>
   </ul>
 
   <h3>Cargar una reserva a mano</h3>
@@ -1243,7 +1286,7 @@ Escribe <b>OK EN-0042</b> para confirmar o <b>CANCELAR EN-0042</b> si no puedes.
     <li>Nombre, apellido y teléfono (obligatorio). Si ese teléfono ya es cliente, se reutiliza su ficha.</li>
     <li>Tipo de viaje (solo ida o ida y vuelta) y punto de recogida, que define precio y anticipo.</li>
     <li>Cantidad de asientos y nombres de los pasajeros. Los nombres pueden quedar vacíos y completarse antes del viaje.</li>
-    <li>Si ya te pagó algo, ponlo en <strong>Ya cobrado</strong>; la app te muestra el total y lo que falta. Agrega un extra si lo hay.</li>
+    <li>Si ya te pagó algo, ponlo en <strong>Ya cobrado</strong> y elige <strong>Cómo pagó</strong>: queda como el primer pago de la reserva. La app te muestra el total y lo que falta. Agrega un extra si lo hay.</li>
     <li>Pulsa <span class="ui">Cargar reserva</span>.</li>
   </ol>
   <p>Una reserva cargada a mano nace confirmada (la aprobación es para las reservas web) y respeta los asientos libres, pero puede cargarse aunque la ventana de reserva esté cerrada.</p>
@@ -1296,6 +1339,7 @@ Escribe <b>OK EN-0042</b> para confirmar o <b>CANCELAR EN-0042</b> si no puedes.
         <tr><td>Se cobra el anticipo</td><td class="wrap">El pasajero: se recibió su anticipo y cuánto queda para el día del viaje.</td></tr>
         <tr><td>Cancelas una reserva</td><td class="wrap">El pasajero: su reserva fue cancelada y, si ya había pagado algo, que te contacte para coordinar la devolución.</td></tr>
         <tr><td>Cancelas una salida</td><td class="wrap">Cada pasajero con una reserva activa en esa salida: que la salida fue cancelada, con el mismo aviso de devolución si pagó algo.</td></tr>
+        <tr><td>Devuelves o rechazas una devolución</td><td class="wrap">El pasajero: <em>Te devolvimos …</em> con el método, o que la devolución no procede y el motivo. Va con el interruptor <span class="path">Ajustes <i>›</i> Recordatorios y avisos de pago</span>.</td></tr>
       </tbody>
     </table>
   </div>
@@ -1349,15 +1393,30 @@ Viajes Ruta Central</div>
     </div>
   </div>
 
+  <h2 id="vd-finanzas">Finanzas</h2>
+  <p><span class="path">Finanzas</span> muestra el dinero de tus viajes en el periodo que elijas: <strong>Previsto</strong> (lo que valen las reservas, sin las canceladas), <strong>Cobrado</strong> (lo que entró, ya restado lo devuelto), <strong>Pendiente</strong> y <strong>Vencido</strong> (salidas que ya pasaron sin cobrar del todo y anticipos con el plazo vencido). Solo la ves tú. Si también das turnos, arriba eliges <span class="ui">Pasajes</span>.</p>
+  <figure class="shot"><img src="/images/help/finances-trips.webp" alt="Finanzas de los pasajes en el teléfono: Previsto, Cobrado, Pendiente y Vencido del mes pasado." width="520" height="933" loading="lazy"><figcaption>Finanzas de los pasajes.</figcaption></figure>
+  <ul>
+    <li><strong>Periodos:</strong> Hoy, Esta semana, Este mes, Mes pasado, Próximos 30 días o las fechas que elijas (un solo día: la misma fecha en <em>Desde</em> y <em>Hasta</em>).</li>
+    <li><strong>Resumen por periodo:</strong> lo previsto y lo cobrado por día, semana o mes, con gráfico y tabla.</li>
+    <li><strong>Reserva por reserva:</strong> cada reserva con su salida, destino, parada, lo pagado y lo que falta. Tócala para abrir sus cobros.</li>
+    <li><strong>Filtros:</strong> pasajero, salida, destino, punto de recogida (al elegir una salida), solo ida o ida y vuelta, forma de pago y estado del pago. Toca la cifra <strong>Vencido</strong> para ver solo lo que hay que reclamar.</li>
+    <li><strong>Descargas:</strong> <span class="ui">CSV</span> y <span class="ui">Excel</span> con lo que estás viendo, en la versión web.</li>
+  </ul>
+  <div class="callout note">
+    <span class="tag">Bueno saber</span>
+    <p>Lo cobrado cuenta el día en que entró el dinero; lo previsto y lo pendiente, el día de la salida. Un anticipo cobrado hoy para una salida del mes que viene suma a lo cobrado de este mes.</p>
+  </div>
+
   <h2 id="vd-resto">Clientes, equipo y cuenta</h2>
   <ul>
     <li><strong>Clientes:</strong> cada persona que reserva queda guardada por su teléfono en <span class="path">Clientes</span>, donde puedes buscarla, editarla, desactivarla o exportar la lista a CSV.</li>
-    <li><strong>Equipo:</strong> en <span class="path">Invitar</span> escribe el correo de alguien de tu equipo y pulsa <span class="ui">Enviar invitación</span>. Entra como personal: ve las salidas y los pasajeros, e imprime o exporta la hoja, pero no crea salidas, no carga reservas, no aprueba y no registra cobros.</li>
+    <li><strong>Equipo:</strong> en <span class="path">Invitar</span> escribe el correo de alguien de tu equipo y pulsa <span class="ui">Enviar invitación</span>. Entra como personal: ve las salidas y los pasajeros, registra cobros y extras, e imprime o exporta la hoja, pero no crea salidas, no anula pagos, no decide devoluciones y no ve <span class="path">Finanzas</span>.</li>
     <li class="web-only"><strong>Suscripción:</strong> 15 días de prueba gratis. El plan Pasajes cuesta 5 USD al mes (8 USD si además das turnos), y el año completo cuesta 10 meses. Desde 2 días antes de vencer te avisamos por WhatsApp; al vencer tienes 5 días de margen y después aparece Acceso bloqueado hasta pagar, sin perder datos. Para pagar, escribe a soporte por WhatsApp desde <span class="path">Suscripción</span>.</li>
     <li class="app-only"><strong>Suscripción:</strong> 15 días de prueba gratis. Desde 2 días antes de vencer te avisamos por WhatsApp; al vencer tienes 5 días de margen y después aparece Acceso bloqueado, sin perder datos. Tu plan y tus fechas están en <span class="path">Suscripción</span>.</li>
     <li><strong>Mi cuenta:</strong> tu correo y tu rol, cambiar tu nombre y tu contraseña, y la opción de eliminar la cuenta escribiendo <span class="ui">ELIMINAR</span>.</li>
   </ul>
-  <p>Si tu negocio solo vende viajes, la app no te muestra las secciones de turnos: en el menú verás Viajes, Clientes, Ajustes, Suscripción, Invitar, Mi cuenta y Ayuda, y en el teléfono la barra inferior tiene Inicio, Viajes, Clientes y Más.</p>
+  <p>Si tu negocio solo vende viajes, la app no te muestra las secciones de turnos: en el menú verás Viajes, Clientes, Finanzas, Ajustes, Suscripción, Invitar, Mi cuenta y Ayuda, y en el teléfono la barra inferior tiene Inicio, Viajes, Clientes y Más.</p>
 
   <h2 id="vd-limites">Lo que todavía no se puede hacer</h2>
   <ul>
