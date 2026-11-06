@@ -77,6 +77,7 @@ import {
   useState,
 } from "react";
 import { useCreateParam } from "@/hooks/useCreateParam";
+import { useOpenParam } from "@/hooks/useOpenParam";
 
 const DayCalendar = dynamic(
   () =>
@@ -714,6 +715,17 @@ function AppointmentsContent() {
     setSelectedAppointment(apt);
     setShowDetailModal(true);
   }, []);
+
+  // A row of Finanzas opens its appointment here
+  const handleOpenParam = useCallback(
+    (id: string) => {
+      void AppointmentService.getWithDetails(id).then((apt) => {
+        if (apt) handleAppointmentClick(apt);
+      });
+    },
+    [handleAppointmentClick]
+  );
+  useOpenParam(handleOpenParam, !!profile);
 
   const handleDayTimeSlotClick = useCallback(
     (time: string) => {

@@ -17,6 +17,7 @@ import {
   UserCog,
   UserPlus,
   Users,
+  Wallet,
 } from "lucide-react";
 
 export interface NavItem {
@@ -98,6 +99,14 @@ export const NAV_GROUPS: readonly NavGroup[] = [
         roles: ["admin", "owner"],
         requiresOrg: true,
         module: "appointments",
+      },
+      {
+        // Both modules have money: no module filter, the page shows a tab per module
+        name: "Finanzas",
+        href: "/dashboard/finances",
+        Icon: Wallet,
+        roles: ["admin", "owner"],
+        requiresOrg: true,
       },
       {
         name: "Ajustes",

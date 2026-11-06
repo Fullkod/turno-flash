@@ -20,14 +20,16 @@ function escapeCsvValue(value: CsvValue): string {
  * @param filename Nombre del archivo (se añade .csv si falta)
  * @param headers  Fila de encabezados
  * @param rows     Filas de datos
+ * @param delimiter "," por defecto; ";" para que Excel en español separe las columnas
  */
 export function downloadCsv(
   filename: string,
   headers: string[],
-  rows: CsvValue[][]
+  rows: CsvValue[][],
+  delimiter: "," | ";" = ","
 ): void {
   const lines = [headers, ...rows].map((row) =>
-    row.map(escapeCsvValue).join(",")
+    row.map(escapeCsvValue).join(delimiter)
   );
   // BOM para que Excel detecte UTF-8
   const csv = "﻿" + lines.join("\r\n");
