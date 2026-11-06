@@ -34,6 +34,12 @@ comentario y despliegues en Tasknic **solo cuando ella lo pide** → tarea a `in
 - TUR0003 anticipos — en revisión (prueba real con WhatsApp hecha 2026-10-21, OT-0065).
 - TUR0007 precio y condiciones — en revisión, asignada a Claudia.
 - **TUR0011 Finanzas — subido (`0021703`), comentario a nombre de Claudia y en «En revisión» el 2026-11-05.**
+- **TUR0010 devoluciones — entregada en Tasknic el 2026-11-05** (estaba hecha desde el 23/10 pero seguía «En progreso»
+  sin comentario): comentario a nombre de Claudia, despliegues 097 / `wa-send` v39 / `wa-inbound` v51 / web `f3ece97`,
+  y en «En revisión».
+- **TUR0013 «Hacer las pruebas pendientes»** (creada el 2026-11-05, asignada a Claudia): checklist de todo lo que falta
+  probar (WhatsApp real de TUR0003/8/9/10/11, Excel en Microsoft Excel, licencias, teléfonos y redes cubanas, limpieza de
+  datos de prueba). Lo nuevo sin probar se añade ahí.
 - **TUR0008 pagos de cada turno — HECHO EN LOCAL, PAUSADO el 2026-10-22 antes de entregar** (ver abajo).
 - Siguientes del board: TUR0009 recordatorios de pago, TUR0010 devoluciones, TUR0011 panel e informes
   (TUR0012 pasarelas de pago).
