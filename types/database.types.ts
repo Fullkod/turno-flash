@@ -1746,6 +1746,216 @@ export type Database = {
           },
         ]
       }
+      trip_booking_payments: {
+        Row: {
+          amount: number
+          created_at: string
+          created_by: string | null
+          id: string
+          method: Database["public"]["Enums"]["appointment_payment_method"]
+          method_other: string | null
+          notes: string | null
+          organization_id: string
+          paid_at: string
+          receipt_path: string | null
+          reference: string | null
+          trip_booking_id: string
+          void_reason: string | null
+          voided_at: string | null
+          voided_by: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          method: Database["public"]["Enums"]["appointment_payment_method"]
+          method_other?: string | null
+          notes?: string | null
+          organization_id: string
+          paid_at?: string
+          receipt_path?: string | null
+          reference?: string | null
+          trip_booking_id: string
+          void_reason?: string | null
+          voided_at?: string | null
+          voided_by?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          method?: Database["public"]["Enums"]["appointment_payment_method"]
+          method_other?: string | null
+          notes?: string | null
+          organization_id?: string
+          paid_at?: string
+          receipt_path?: string | null
+          reference?: string | null
+          trip_booking_id?: string
+          void_reason?: string | null
+          voided_at?: string | null
+          voided_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trip_booking_payments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trip_booking_payments_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations_with_license_status"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trip_booking_payments_trip_booking_id_fkey"
+            columns: ["trip_booking_id"]
+            isOneToOne: false
+            referencedRelation: "trip_bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trip_booking_refund_events: {
+        Row: {
+          changed_at: string
+          changed_by: string | null
+          id: string
+          note: string | null
+          organization_id: string
+          refund_id: string
+          status: Database["public"]["Enums"]["appointment_refund_status"]
+        }
+        Insert: {
+          changed_at?: string
+          changed_by?: string | null
+          id?: string
+          note?: string | null
+          organization_id: string
+          refund_id: string
+          status: Database["public"]["Enums"]["appointment_refund_status"]
+        }
+        Update: {
+          changed_at?: string
+          changed_by?: string | null
+          id?: string
+          note?: string | null
+          organization_id?: string
+          refund_id?: string
+          status?: Database["public"]["Enums"]["appointment_refund_status"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trip_booking_refund_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trip_booking_refund_events_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations_with_license_status"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trip_booking_refund_events_refund_id_fkey"
+            columns: ["refund_id"]
+            isOneToOne: false
+            referencedRelation: "trip_booking_refunds"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      trip_booking_refunds: {
+        Row: {
+          amount: number
+          created_at: string
+          created_by: string | null
+          decided_at: string | null
+          decided_by: string | null
+          id: string
+          method:
+            | Database["public"]["Enums"]["appointment_payment_method"]
+            | null
+          method_other: string | null
+          notice_sent_at: string | null
+          organization_id: string
+          reason: string
+          refunded_at: string | null
+          rejection_reason: string | null
+          status: Database["public"]["Enums"]["appointment_refund_status"]
+          trip_booking_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          created_by?: string | null
+          decided_at?: string | null
+          decided_by?: string | null
+          id?: string
+          method?:
+            | Database["public"]["Enums"]["appointment_payment_method"]
+            | null
+          method_other?: string | null
+          notice_sent_at?: string | null
+          organization_id: string
+          reason: string
+          refunded_at?: string | null
+          rejection_reason?: string | null
+          status?: Database["public"]["Enums"]["appointment_refund_status"]
+          trip_booking_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          created_by?: string | null
+          decided_at?: string | null
+          decided_by?: string | null
+          id?: string
+          method?:
+            | Database["public"]["Enums"]["appointment_payment_method"]
+            | null
+          method_other?: string | null
+          notice_sent_at?: string | null
+          organization_id?: string
+          reason?: string
+          refunded_at?: string | null
+          rejection_reason?: string | null
+          status?: Database["public"]["Enums"]["appointment_refund_status"]
+          trip_booking_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "trip_booking_refunds_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trip_booking_refunds_organization_id_fkey"
+            columns: ["organization_id"]
+            isOneToOne: false
+            referencedRelation: "organizations_with_license_status"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trip_booking_refunds_trip_booking_id_fkey"
+            columns: ["trip_booking_id"]
+            isOneToOne: false
+            referencedRelation: "trip_bookings"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       trip_bookings: {
         Row: {
           amount_paid: number
@@ -1957,6 +2167,7 @@ export type Database = {
           departure_time: string
           deposit_per_seat: number
           description: string | null
+          destination: string | null
           driver_name: string | null
           driver_phone: string | null
           id: string
@@ -1988,6 +2199,7 @@ export type Database = {
           departure_time: string
           deposit_per_seat?: number
           description?: string | null
+          destination?: string | null
           driver_name?: string | null
           driver_phone?: string | null
           id?: string
@@ -2019,6 +2231,7 @@ export type Database = {
           departure_time?: string
           deposit_per_seat?: number
           description?: string | null
+          destination?: string | null
           driver_name?: string | null
           driver_phone?: string | null
           id?: string
@@ -2631,6 +2844,80 @@ export type Database = {
         Args: { p_date: string; p_hours: number; p_start: string; p_tz: string }
         Returns: string
       }
+      finance_appointments_base: {
+        Args: { p_filters: Json; p_org: string; p_today: string }
+        Returns: {
+          closed: boolean
+          day: string
+          detail: Json
+          expected: number
+          id: string
+          overdue: number
+          paid: number
+          payment_status: string
+          pending: number
+          refund_pending: number
+          refunded: number
+          sort_time: string
+          status: string
+        }[]
+      }
+      finance_appointments_movements: {
+        Args: {
+          p_end: string
+          p_method: string
+          p_org: string
+          p_start: string
+          p_tz: string
+        }
+        Returns: {
+          amount: number
+          day: string
+          kind: string
+          owner_id: string
+        }[]
+      }
+      finance_check_period: {
+        Args: { p_end: string; p_module: string; p_start: string }
+        Returns: undefined
+      }
+      finance_resolve_org: {
+        Args: { p_organization_id: string }
+        Returns: string
+      }
+      finance_trips_base: {
+        Args: { p_filters: Json; p_org: string; p_today: string }
+        Returns: {
+          closed: boolean
+          day: string
+          detail: Json
+          expected: number
+          id: string
+          overdue: number
+          paid: number
+          payment_status: string
+          pending: number
+          refund_pending: number
+          refunded: number
+          sort_time: string
+          status: string
+        }[]
+      }
+      finance_trips_movements: {
+        Args: {
+          p_end: string
+          p_method: string
+          p_org: string
+          p_start: string
+          p_tz: string
+        }
+        Returns: {
+          amount: number
+          day: string
+          kind: string
+          owner_id: string
+        }[]
+      }
       generate_appointment_number: { Args: { org_id: string }; Returns: string }
       generate_trip_booking_number: {
         Args: { p_org_id: string }
@@ -2664,6 +2951,29 @@ export type Database = {
           unique_errors: number
           unresolved_errors: number
         }[]
+      }
+      get_financial_rows: {
+        Args: {
+          p_end_date: string
+          p_filters?: Json
+          p_limit?: number
+          p_module: string
+          p_offset?: number
+          p_organization_id?: string
+          p_start_date: string
+        }
+        Returns: Json
+      }
+      get_financial_summary: {
+        Args: {
+          p_end_date: string
+          p_filters?: Json
+          p_group_by: string
+          p_module: string
+          p_organization_id?: string
+          p_start_date: string
+        }
+        Returns: Json
       }
       get_my_organization_license_status: {
         Args: { grace_period_days?: number }
@@ -2777,6 +3087,10 @@ export type Database = {
         Args: { p_appointment_id: string }
         Returns: undefined
       }
+      refresh_trip_deposit_refunded: {
+        Args: { p_booking_id: string }
+        Returns: undefined
+      }
       register_appointment_payment: {
         Args: {
           p_amount: number
@@ -2795,6 +3109,31 @@ export type Database = {
         Args: {
           p_amount: number
           p_appointment_id: string
+          p_method: Database["public"]["Enums"]["appointment_payment_method"]
+          p_method_other: string
+          p_processed: boolean
+          p_reason: string
+          p_refunded_at: string
+        }
+        Returns: string
+      }
+      register_trip_payment: {
+        Args: {
+          p_amount: number
+          p_booking_id: string
+          p_method: Database["public"]["Enums"]["appointment_payment_method"]
+          p_method_other: string
+          p_notes: string
+          p_paid_at: string
+          p_receipt_path: string
+          p_reference: string
+        }
+        Returns: string
+      }
+      register_trip_refund: {
+        Args: {
+          p_amount: number
+          p_booking_id: string
           p_method: Database["public"]["Enums"]["appointment_payment_method"]
           p_method_other: string
           p_processed: boolean
@@ -2882,6 +3221,25 @@ export type Database = {
         }
         Returns: undefined
       }
+      set_trip_refund_status: {
+        Args: {
+          p_method: Database["public"]["Enums"]["appointment_payment_method"]
+          p_method_other: string
+          p_note: string
+          p_refund_id: string
+          p_refunded_at: string
+          p_status: string
+        }
+        Returns: undefined
+      }
+      trip_booking_amount_paid: {
+        Args: { p_booking_id: string }
+        Returns: number
+      }
+      trip_booking_amount_refunded: {
+        Args: { p_booking_id: string; p_with_pending?: boolean }
+        Returns: number
+      }
       trip_booking_window_open: {
         Args: { p_trip_id: string }
         Returns: boolean
@@ -2899,6 +3257,10 @@ export type Database = {
       }
       trip_seats_taken: { Args: { p_trip_id: string }; Returns: number }
       void_appointment_payment: {
+        Args: { p_payment_id: string; p_reason: string }
+        Returns: undefined
+      }
+      void_trip_payment: {
         Args: { p_payment_id: string; p_reason: string }
         Returns: undefined
       }
@@ -3006,6 +3368,8 @@ export type Database = {
         | "payment_received"
         | "refund_processed"
         | "refund_rejected"
+        | "trip_refund_processed"
+        | "trip_refund_rejected"
       wa_outbound_status: "pending" | "sent" | "delivered" | "read" | "failed"
       waitlist_status:
         | "active"
@@ -3225,6 +3589,8 @@ export const Constants = {
         "payment_received",
         "refund_processed",
         "refund_rejected",
+        "trip_refund_processed",
+        "trip_refund_rejected",
       ],
       wa_outbound_status: ["pending", "sent", "delivered", "read", "failed"],
       waitlist_status: ["active", "notified", "booked", "expired", "cancelled"],

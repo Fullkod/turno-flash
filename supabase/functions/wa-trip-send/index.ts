@@ -6,10 +6,12 @@
 //
 // Body: { bookingId: string, intent: "trip_booked" | "trip_approved"
 //         | "trip_deposit_paid" | "trip_notify_business"
-//         | "trip_booking_cancelled" | "trip_departure_cancelled" }
+//         | "trip_booking_cancelled" | "trip_departure_cancelled"
+//         | "trip_refund_processed" | "trip_refund_rejected", refundId? }
 //
 // One intent per EVENT: approving a booking and receiving its deposit are
-// independent, so each one has its own message.
+// independent, so each one has its own message. Refunds (099) are one message
+// per refund (a booking can have several), deduplicated by notice_sent_at.
 
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import {
@@ -34,6 +36,8 @@ const PASSENGER_FRAME: Partial<Record<Intent, FrameOptions>> = {
   trip_deposit_paid: { contact: false, reply: "none" },
   trip_booking_cancelled: { contact: true, reply: "none" },
   trip_departure_cancelled: { contact: true, reply: "none" },
+  trip_refund_processed: { contact: false, reply: "none" },
+  trip_refund_rejected: { contact: true, reply: "none" },
 };
 
 type Intent =
@@ -42,7 +46,25 @@ type Intent =
   | "trip_deposit_paid"
   | "trip_notify_business"
   | "trip_booking_cancelled"
-  | "trip_departure_cancelled";
+  | "trip_departure_cancelled"
+  | "trip_refund_processed"
+  | "trip_refund_rejected";
+
+const PAYMENT_METHOD_LABEL: Record<string, string> = {
+  cash: "efectivo",
+  transfer: "transferencia",
+  card: "tarjeta",
+};
+
+/** The refund of trip_refund_processed / trip_refund_rejected (099). */
+interface RefundRow {
+  status: string;
+  notice_sent_at: string | null;
+  amount: number;
+  method: string | null;
+  method_other: string | null;
+  rejection_reason: string | null;
+}
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -137,14 +159,23 @@ Deno.serve(async (req) => {
   }
 
   try {
-    const { bookingId, intent } = (await req.json()) as {
+    const { bookingId, intent, refundId } = (await req.json()) as {
       bookingId: string;
       intent: Intent;
+      refundId?: string;
     };
     if (!bookingId || !intent) {
       return json(400, {
         success: false,
         error: "bookingId and intent are required",
+      });
+    }
+    const isRefund =
+      intent === "trip_refund_processed" || intent === "trip_refund_rejected";
+    if (isRefund && !refundId) {
+      return json(400, {
+        success: false,
+        error: `refundId is required for intent=${intent}`,
       });
     }
 
@@ -224,23 +255,45 @@ Deno.serve(async (req) => {
         contact_name: string | null;
       }>();
 
-    // Every intent is sent once per booking: a retry of the trigger, or two
-    // updates in a row, must not spam the passenger.
-    const { data: existing } = await supabase
-      .from("wa_outbound_messages")
-      .select("id")
-      .eq("trip_booking_id", bookingId)
-      .eq("intent", intent)
-      .in("status", ["pending", "sent", "delivered", "read"])
-      .limit(1)
-      .maybeSingle();
+    let refund: RefundRow | null = null;
+    if (isRefund) {
+      const { data: ref } = await supabase
+        .from("trip_booking_refunds")
+        .select("status, notice_sent_at, amount, method, method_other, rejection_reason")
+        .eq("id", refundId!)
+        .eq("trip_booking_id", bookingId)
+        .maybeSingle<RefundRow>();
+      const expected = intent === "trip_refund_processed" ? "processed" : "rejected";
+      const skip = !ref
+        ? "Refund not found"
+        : ref.status !== expected
+          ? `Refund is ${ref.status}`
+          : ref.notice_sent_at
+            ? "Refund notice already sent"
+            : null;
+      if (skip) {
+        return json(200, { success: true, skipped: true, reason: skip });
+      }
+      refund = ref;
+    } else {
+      // Every other intent is sent once per booking: a retry of the trigger,
+      // or two updates in a row, must not spam the passenger.
+      const { data: existing } = await supabase
+        .from("wa_outbound_messages")
+        .select("id")
+        .eq("trip_booking_id", bookingId)
+        .eq("intent", intent)
+        .in("status", ["pending", "sent", "delivered", "read"])
+        .limit(1)
+        .maybeSingle();
 
-    if (existing) {
-      return json(200, {
-        success: true,
-        skipped: true,
-        reason: `Already sent (intent=${intent})`,
-      });
+      if (existing) {
+        return json(200, {
+          success: true,
+          skipped: true,
+          reason: `Already sent (intent=${intent})`,
+        });
+      }
     }
 
     // Who reads it: the business for the heads-up, the passenger otherwise.
@@ -267,7 +320,8 @@ Deno.serve(async (req) => {
       booking,
       intent,
       org?.currency ?? "USD",
-      settings.deposit_instructions
+      settings.deposit_instructions,
+      refund
     );
     const frame = PASSENGER_FRAME[intent];
     const business: BusinessContact = {
@@ -294,6 +348,13 @@ Deno.serve(async (req) => {
       error_code: result.success ? null : (result.error?.code ?? "UNKNOWN"),
       error_message: result.success ? null : (result.error?.message ?? null),
     });
+    // OpenWA can answer HTTP 500 after delivering: never send a refund notice twice
+    if (isRefund) {
+      await supabase
+        .from("trip_booking_refunds")
+        .update({ notice_sent_at: new Date().toISOString() })
+        .eq("id", refundId!);
+    }
 
     if (!result.success) {
       return json(200, {
@@ -317,7 +378,8 @@ function buildMessage(
   booking: BookingRow,
   intent: Intent,
   currency: string,
-  depositInstructions: string | null
+  depositInstructions: string | null,
+  refund: RefundRow | null
 ): string {
   const trip = booking.trips;
   const customer = booking.customers;
@@ -410,6 +472,22 @@ ${header}` +
 
 ${header}` +
         (refundNote ? `\n\n${refundNote}` : "")
+      );
+
+    case "trip_refund_processed": {
+      const method =
+        refund?.method_other?.trim() || PAYMENT_METHOD_LABEL[refund?.method ?? ""] || "";
+      return (
+        `💸 Hola ${name}! Te devolvimos *${money(Number(refund?.amount ?? 0), currency)}*` +
+        `${method ? ` (${method})` : ""} de tu reserva.\n\n${header}`
+      );
+    }
+
+    case "trip_refund_rejected":
+      return (
+        `Hola ${name}, revisamos tu devolución de *${money(Number(refund?.amount ?? 0), currency)}* ` +
+        `y no procede.\n\n${header}` +
+        (refund?.rejection_reason?.trim() ? `\n\nMotivo: ${refund.rejection_reason.trim()}` : "")
       );
 
     case "trip_notify_business": {
