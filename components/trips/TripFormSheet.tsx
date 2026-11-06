@@ -87,6 +87,20 @@ export function TripFormSheet({
           />
         </Field>
 
+        <Field
+          label="Destino (opcional)"
+          hint="Hacia dónde va. Sirve para filtrar el dinero en Finanzas."
+        >
+          <input
+            type="text"
+            maxLength={120}
+            value={formData.destination}
+            onChange={(e) => onChange({ destination: e.target.value })}
+            className={inputClasses}
+            placeholder="Varadero"
+          />
+        </Field>
+
         <div className="grid gap-4 sm:grid-cols-2">
           <Field
             label="Descripción"

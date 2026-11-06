@@ -17,9 +17,10 @@ import { cancellationLabel } from "@/utils/cancellation";
 import { fromLocalDateTimeInput, toLocalDateTimeInput } from "@/utils/deposit";
 import { useState } from "react";
 
-type Errors = Partial<Record<"amount" | "reason" | "method" | "methodOther" | "refundedAt", string>>;
+export type RefundErrors = Partial<Record<"amount" | "reason" | "method" | "methodOther" | "refundedAt", string>>;
+type Errors = RefundErrors;
 
-function issuesToErrors(issues: { path: PropertyKey[]; message: string }[]): Errors {
+export function issuesToErrors(issues: { path: PropertyKey[]; message: string }[]): Errors {
   const next: Errors = {};
   for (const issue of issues) {
     const key = issue.path[0] as keyof Errors;
@@ -29,7 +30,7 @@ function issuesToErrors(issues: { path: PropertyKey[]; message: string }[]): Err
 }
 
 /** How and when the money went back: method (+ which one) and date. */
-function HowFields({
+export function HowFields({
   method,
   setMethod,
   methodOther,

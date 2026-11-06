@@ -2,6 +2,7 @@
 
 import { useMoney } from "@/hooks/useMoney";
 
+import { METHOD_OPTIONS } from "@/components/appointments/RegisterPaymentSheet";
 import {
   Button,
   Field,
@@ -256,6 +257,25 @@ export function ManualBookingSheet({
           >
             Cobré el anticipo ({money(depositTotal)})
           </button>
+        )}
+
+        {paid > 0 && (
+          <Field label="Cómo pagó">
+            <Select
+              value={form.payment_method}
+              onChange={(e) =>
+                onChange({
+                  payment_method: e.target.value as ManualBookingFormState["payment_method"],
+                })
+              }
+            >
+              {METHOD_OPTIONS.filter((o) => o.value !== "other").map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.label}
+                </option>
+              ))}
+            </Select>
+          </Field>
         )}
 
         <div className="grid gap-3 sm:grid-cols-[1fr_auto]">

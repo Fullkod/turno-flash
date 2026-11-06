@@ -67,30 +67,21 @@ function useInvalidateBookings() {
   };
 }
 
-/** Money axis. Does not approve anything. */
-export function useSetAmountPaid() {
+/** What is charged on top of the seats. The payments live in useTripBookingMoney. */
+export function useSetBookingExtra() {
   const invalidate = useInvalidateBookings();
 
   return useMutation({
     mutationFn: async ({
       bookingId,
-      amountPaid,
-      method,
       extra,
     }: {
       bookingId: string;
-      amountPaid: number;
-      method?: string;
-      extra?: { description: string; amount: number };
+      extra: { description: string; amount: number };
     }) => {
-      const result = await TripBookingService.setAmountPaid(
-        bookingId,
-        amountPaid,
-        method,
-        extra
-      );
+      const result = await TripBookingService.setExtra(bookingId, extra);
       if (!result.success) {
-        throw new Error(result.error || "Error al actualizar el cobro");
+        throw new Error(result.error || "Error al guardar el extra");
       }
     },
     onSuccess: invalidate,

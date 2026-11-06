@@ -28,6 +28,8 @@ export interface Trip {
   title: string;
   description: string | null;
   pickup_location: string | null;
+  /** Where the trip goes (098, optional): a filter of Finanzas. */
+  destination: string | null;
   /** YYYY-MM-DD */
   departure_date: string;
   /** HH:MM:SS */
@@ -104,6 +106,7 @@ export interface TripFormData {
   title: string;
   description: string;
   pickup_location: string;
+  destination: string;
   departure_date: string;
   /** HH:MM */
   departure_time: string;
@@ -202,6 +205,8 @@ export interface ManualBookingFormState {
   pickup_point_id: string;
   /** How much money the business already received for this booking. */
   amount_paid: NumericField;
+  /** How that money came in: it becomes the first payment (098). */
+  payment_method: "cash" | "transfer" | "card";
   extra_description: string;
   extra_amount: NumericField;
 }

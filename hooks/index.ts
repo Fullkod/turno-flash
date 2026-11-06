@@ -166,7 +166,7 @@ export {
   tripBookingKeys,
   useCreateManualBooking,
   useSetBookingStatus,
-  useSetAmountPaid,
+  useSetBookingExtra,
   useTripBookingsQuery,
   useUpdatePassengerNames,
 } from "./useTripBookings.query";

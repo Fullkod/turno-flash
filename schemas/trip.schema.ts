@@ -25,6 +25,12 @@ export const tripFormSchema = z
       })
       .optional()
       .or(z.literal("")),
+    destination: z
+      .string()
+      .trim()
+      .max(120, { message: "El destino no puede superar los 120 caracteres" })
+      .optional()
+      .or(z.literal("")),
     departure_date: z
       .string()
       .regex(/^\d{4}-\d{2}-\d{2}$/, { message: "Fecha de salida inválida" }),

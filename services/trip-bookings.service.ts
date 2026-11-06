@@ -2,6 +2,7 @@ import type {
   ManualBookingFormState,
   TripBookingWithCustomer,
 } from "@/types/trips";
+import { TripPaymentsService } from "@/services/trip-booking-money.service";
 import { Logger } from "@/utils/logger";
 import { DEFAULT_COUNTRY_CODE, toInternationalPhone } from "@/utils/phone";
 import { createClient } from "@/utils/supabase/client";
@@ -60,29 +61,20 @@ export class TripBookingService {
   }
 
   /**
-   * Money only: never approves, never cancels. What gets stored is how much
-   * was actually received; the trigger of migration 037 keeps deposit_status
-   * in sync, and what is left to collect is price_total - amount_paid.
+   * What is charged on top of the seats. The money received is not written
+   * here: it is the sum of the payments (TripPaymentsService, migration 098).
    */
-  static async setAmountPaid(
+  static async setExtra(
     bookingId: string,
-    amountPaid: number,
-    method?: string,
-    extra?: { description: string; amount: number }
+    extra: { description: string; amount: number }
   ): Promise<{ success: boolean; error?: string }> {
     try {
       const supabase = createClient();
       const { data, error } = await supabase
         .from("trip_bookings")
         .update({
-          amount_paid: Math.max(amountPaid, 0),
-          deposit_method: method?.trim() || null,
-          ...(extra
-            ? {
-                extra_description: extra.description.trim() || null,
-                extra_amount: Math.max(extra.amount, 0),
-              }
-            : {}),
+          extra_description: extra.description.trim() || null,
+          extra_amount: Math.max(extra.amount, 0),
         })
         .eq("id", bookingId)
         .select("id");
@@ -91,8 +83,8 @@ export class TripBookingService {
       if (!data?.length) throw new Error("not_saved");
       return { success: true };
     } catch (error) {
-      void Logger.error("Error updating trip payment", error, { bookingId });
-      return { success: false, error: "No se pudo actualizar el cobro" };
+      void Logger.error("Error updating trip booking extra", error, { bookingId });
+      return { success: false, error: "No se pudo guardar el extra" };
     }
   }
 
@@ -221,7 +213,7 @@ export class TripBookingService {
 
       const depositAmount = params.depositPerSeat * seats;
       const amountPaid = form.amount_paid === "" ? 0 : form.amount_paid;
-      const { error } = await supabase.from("trip_bookings").insert({
+      const { data: booking, error } = await supabase.from("trip_bookings").insert({
         organization_id: organizationId,
         trip_id: tripId,
         customer_id: customerId,
@@ -235,14 +227,35 @@ export class TripBookingService {
         trip_type: form.trip_type,
         price_total: params.pricePerSeat * seats,
         deposit_amount: depositAmount,
-        // deposit_status and deposit_paid_at are derived by the trigger.
-        amount_paid: amountPaid,
+        // amount_paid, deposit_status and deposit_paid_at follow the payments (037, 098).
         pickup_point_id: form.pickup_point_id || null,
         extra_description: form.extra_description.trim() || null,
         extra_amount: form.extra_amount === "" ? 0 : form.extra_amount,
         notes: form.notes.trim() || null,
-      });
+      }).select("id").single();
       if (error) throw error;
+
+      // What was already handed over becomes the first payment of the booking
+      if (amountPaid > 0) {
+        const paid = await TripPaymentsService.register(
+          { id: booking.id, organization_id: organizationId },
+          {
+            amount: amountPaid,
+            paidAt: null,
+            method: form.payment_method,
+            methodOther: null,
+            reference: null,
+            notes: null,
+            receipt: null,
+          }
+        );
+        if (!paid.success) {
+          return {
+            success: false,
+            error: `La reserva quedó cargada, pero el cobro no: ${paid.error}`,
+          };
+        }
+      }
       return { success: true };
     } catch (error) {
       void Logger.error("Error creating manual trip booking", error, { tripId });

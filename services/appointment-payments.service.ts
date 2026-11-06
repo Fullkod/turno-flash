@@ -43,6 +43,34 @@ function rpcError(message: string, fallback: string): string {
   return key ? RPC_ERRORS[key] : `${fallback}: ${message}`;
 }
 
+/**
+ * Uploads a receipt to <organization>/<owner>/<file>, the owner being the appointment (095) or the
+ * trip booking (098) the payment belongs to.
+ */
+export async function uploadPaymentReceipt(
+  organizationId: string,
+  ownerId: string,
+  receipt: File
+): Promise<{ path: string } | { error: string }> {
+  const file = await downscaleImage(receipt);
+  if (!RECEIPT_TYPES.includes(file.type)) {
+    return { error: "El comprobante tiene que ser una foto o un PDF." };
+  }
+  if (file.size > RECEIPT_MAX_BYTES) {
+    return { error: "El comprobante pesa más de 5 MB." };
+  }
+  const ext = file.type === "application/pdf" ? "pdf" : file.type.split("/")[1];
+  const path = `${organizationId}/${ownerId}/${crypto.randomUUID()}.${ext}`;
+  const { error } = await createClient()
+    .storage.from(RECEIPT_BUCKET)
+    .upload(path, file, { contentType: file.type, upsert: false });
+  if (error) {
+    void Logger.error("Error uploading payment receipt", error, { ownerId });
+    return { error: "No se pudo subir el comprobante." };
+  }
+  return { path };
+}
+
 /** Payments of an appointment (TUR0008, migration 095). */
 export class AppointmentPaymentsService {
   static async list(appointmentId: string): Promise<AppointmentPayment[]> {
@@ -69,22 +97,13 @@ export class AppointmentPaymentsService {
     let receiptPath: string | null = null;
 
     if (payment.receipt) {
-      const file = await downscaleImage(payment.receipt);
-      if (!RECEIPT_TYPES.includes(file.type)) {
-        return { success: false, error: "El comprobante tiene que ser una foto o un PDF." };
-      }
-      if (file.size > RECEIPT_MAX_BYTES) {
-        return { success: false, error: "El comprobante pesa más de 5 MB." };
-      }
-      const ext = file.type === "application/pdf" ? "pdf" : file.type.split("/")[1];
-      receiptPath = `${appointment.organization_id}/${appointment.id}/${crypto.randomUUID()}.${ext}`;
-      const { error } = await supabase.storage
-        .from(RECEIPT_BUCKET)
-        .upload(receiptPath, file, { contentType: file.type, upsert: false });
-      if (error) {
-        void Logger.error("Error uploading payment receipt", error, { appointmentId: appointment.id });
-        return { success: false, error: "No se pudo subir el comprobante." };
-      }
+      const uploaded = await uploadPaymentReceipt(
+        appointment.organization_id,
+        appointment.id,
+        payment.receipt
+      );
+      if ("error" in uploaded) return { success: false, error: uploaded.error };
+      receiptPath = uploaded.path;
     }
 
     // Every argument but the id, amount and method may be NULL in SQL; the generated types do not say so

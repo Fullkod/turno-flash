@@ -98,10 +98,11 @@ export function PassengerRow({
 
   const menuItems: KebabMenuItem[] = [
     {
-      label: "Registrar cobro",
+      // A cancelled booking that had money still opens it, to refund
+      label: isCancelled ? "Pagos y devoluciones" : "Registrar cobro",
       onClick: () => onRegisterPayment(booking),
       icon: <CircleDollarSign className="h-4 w-4" />,
-      disabled: isCancelled,
+      disabled: isCancelled && !(booking.amount_paid > 0),
     },
     {
       label: "Editar nombres de pasajeros",
@@ -255,6 +256,19 @@ export function PassengerRow({
               Aprobar
             </button>
           )}
+        </div>
+      )}
+
+      {canManage && isCancelled && booking.amount_paid > 0 && (
+        <div className="mt-3 flex flex-wrap gap-2 border-t border-border pt-3">
+          <button
+            type="button"
+            onClick={() => onRegisterPayment(booking)}
+            className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-surface px-3 py-1.5 text-xs font-semibold text-foreground transition-colors hover:bg-muted"
+          >
+            <CircleDollarSign className="h-3.5 w-3.5" />
+            Pagó {money(booking.amount_paid)} · Devoluciones
+          </button>
         </div>
       )}
     </div>

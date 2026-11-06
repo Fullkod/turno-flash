@@ -5,7 +5,7 @@ import { ProtectedRoute } from "@/components/protected-route";
 import { ManualBookingSheet } from "@/components/trips/ManualBookingSheet";
 import { PassengerPrintSheet } from "@/components/trips/PassengerPrintSheet";
 import { PassengerRow } from "@/components/trips/PassengerRow";
-import { PaymentSheet } from "@/components/trips/PaymentSheet";
+import { BookingMoneySheet } from "@/components/trips/BookingMoneySheet";
 import {
   Button,
   ConfirmSheet,
@@ -18,7 +18,6 @@ import { TripService } from "@/services/trips.service";
 import {
   useCreateManualBooking,
   useOrganizationModules,
-  useSetAmountPaid,
   useSetBookingStatus,
   useToast,
   tripKeys,
@@ -43,7 +42,6 @@ import {
   shareText,
 } from "@/utils/driver-list";
 import { shareTrip } from "@/utils/trip-share";
-import { Capacitor } from "@capacitor/core";
 import {
   ArrowLeft,
   Download,
@@ -56,13 +54,14 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { useIsNative } from "@/hooks/useIsNative";
+import { useOpenParam } from "@/hooks/useOpenParam";
 import {
   FormEvent,
   Suspense,
   useCallback,
   useMemo,
   useState,
-  useSyncExternalStore,
 } from "react";
 
 const EMPTY_BOOKING: ManualBookingFormState = {
@@ -76,6 +75,7 @@ const EMPTY_BOOKING: ManualBookingFormState = {
   notes: "",
   pickup_point_id: "",
   amount_paid: "",
+  payment_method: "cash",
   extra_description: "",
   extra_amount: "",
 };
@@ -95,14 +95,6 @@ const DEPOSIT_TEXT: Record<string, string> = {
   waived: "Sin anticipo",
 };
 
-// False while prerendering, the real value on the device: no hydration mismatch
-const subscribeNever = () => () => {};
-const useIsNative = () =>
-  useSyncExternalStore(
-    subscribeNever,
-    () => Capacitor.isNativePlatform(),
-    () => false
-  );
 
 function TripDetailsContent() {
   const searchParams = useSearchParams();
@@ -144,7 +136,13 @@ function TripDetailsContent() {
 
   const { bookings, loading, error } = useTripBookingsQuery(tripId);
 
-  const setAmountPaid = useSetAmountPaid();
+  // A row of Finanzas opens the money of its booking (?open=<booking id>)
+  const handleOpenParam = useCallback(
+    (bookingId: string) => setPaying(bookings.find((b) => b.id === bookingId) ?? null),
+    [bookings]
+  );
+  useOpenParam(handleOpenParam, bookings.length > 0);
+
   const setStatus = useSetBookingStatus();
   const updateNames = useUpdatePassengerNames();
   const createManual = useCreateManualBooking();
@@ -178,36 +176,6 @@ function TripDetailsContent() {
     [liveBookings]
   );
   const photoUrl = TripService.vehiclePhotoUrl(trip?.vehicle_photo_path);
-
-  const handleSavePayment = useCallback(
-    async (payload: {
-      amountPaid: number;
-      method: string;
-      extraDescription: string;
-      extraAmount: number;
-    }) => {
-      if (!paying) return;
-      try {
-        await setAmountPaid.mutateAsync({
-          bookingId: paying.id,
-          amountPaid: payload.amountPaid,
-          method: payload.method,
-          extra: {
-            description: payload.extraDescription,
-            amount: payload.extraAmount,
-          },
-        });
-        toast.success("Cobro registrado", "La aprobación de la reserva no cambió");
-        setPaying(null);
-      } catch (err) {
-        toast.error(
-          "Error",
-          err instanceof Error ? err.message : "No se pudo registrar el cobro"
-        );
-      }
-    },
-    [paying, setAmountPaid, toast]
-  );
 
   const handleApprove = useCallback(
     async (booking: TripBookingWithCustomer) => {
@@ -691,20 +659,19 @@ function TripDetailsContent() {
           Los asientos quedan libres y, si tienes WhatsApp conectado, le
           avisamos al pasajero. No se puede deshacer.
         </p>
-        {rejecting?.deposit_status === "paid" && (
+        {(rejecting?.amount_paid ?? 0) > 0 && (
           <p className="mt-2 text-sm font-semibold text-warning-700 dark:text-warning-400">
-            Ya pagó el anticipo: recuerda devolvérselo.
+            Ya pagó parte del viaje: después registra la devolución en sus cobros.
           </p>
         )}
       </ConfirmSheet>
 
       {paying && (
-        <PaymentSheet
+        <BookingMoneySheet
           key={paying.id}
           booking={paying}
+          tripCancelled={!!trip.cancelled_at}
           onClose={() => setPaying(null)}
-          onSave={handleSavePayment}
-          isSaving={setAmountPaid.isPending}
         />
       )}
 
