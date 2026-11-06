@@ -49,3 +49,13 @@ comentario y despliegues en Tasknic **solo cuando ella lo pide** → tarea a `in
   - que Roberto revise el otro sistema que responde en la línea de WhatsApp compartida.
 - No quedan negocios `qa-fixture-*` en producción (comprobado al pausar).
 
+
+### TUR0011 panel financiero (revisado con Claudia el 2026-11-05)
+- PRP-011 en `.claude/PRPs/prp-financial-reports.md`, **aprobado e implementado el 2026-11-05, en local sin subir**
+  (098 pagos de pasajes + destino, 099 devoluciones de pasajes, 100 RPC `get_financial_summary`/`get_financial_rows`, todo
+  aplicado en producción; `wa-trip-send` v12 desplegada con permiso; sección `/dashboard/finances`). Pendiente: push,
+  comentario y despliegues en Tasknic cuando Claudia lo pida, TUR0011 a «En revisión». Decisiones: solo dueño/admin; Turnos y
+  Pasajes en pestañas separadas, los dos en esta tarea; pasajes con historial de pagos y devoluciones como turnos
+  (098-099, `amount_paid` pasa a calcularse por trigger), aviso de devolución de pasajes por WhatsApp (`wa-trip-send`,
+  desplegar con permiso); campo nuevo «Destino» en las salidas; mismas formas de pago que turnos; Excel hecho a medida;
+  filtros de turnos sin número de turno. Estimación 7-9 días, 8 fases.

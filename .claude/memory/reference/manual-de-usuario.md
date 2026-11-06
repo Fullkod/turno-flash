@@ -68,4 +68,7 @@ Ojo al sembrar pasajes: los puntos de recogida tienen su propio precio (por defe
   WhatsApp (envíos y respuestas), límites y guía del personal; 20.ª foto `deposit.webp` (ficha de un turno con el
   anticipo pendiente), con puppeteer-core + sharp instalados en el scratchpad y un negocio desechable renombrado
   «Estudio Luz» para la foto (borrado al terminar).
-
+- **2026-11-05 (TUR0011):** h2 «Finanzas» en las guías del dueño de turnos y de viajes, «Registrar un cobro» de pasajes
+  rehecho (pago por pago), «Devolver dinero de una reserva cancelada», campo «Destino», aviso de devolución en la tabla de
+  WhatsApp y el personal de viajes sí registra cobros. Fotos nuevas `finances`, `finances-trips` y `trip-payments`
+  (puppeteer-core + sharp, dueño desechable en Organización test, 390x700 @2x → 520 px).
